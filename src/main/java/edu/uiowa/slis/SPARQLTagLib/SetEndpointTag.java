@@ -4,18 +4,25 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import org.apache.log4j.Logger;
 import org.apache.taglibs.standard.tag.common.core.Util;
 
+import edu.uiowa.slis.SPARQLTagLib.util.Endpoint;
+
 @SuppressWarnings("serial")
-public class SetEndpoint extends TagSupport {
+public class SetEndpointTag extends TagSupport {
+	static Logger logger = Logger.getLogger(SetEndpointTag.class);
+
 	String sparqlURL = null;
 	String user = null;
 	String password = null;
 	
+	Endpoint endpoint = null;
+	
 	private int scope = PageContext.PAGE_SCOPE;
 	private String var = null;
 	
-	public SetEndpoint() {
+	public SetEndpointTag() {
 		super();
 		init();
 	}
@@ -30,8 +37,10 @@ public class SetEndpoint extends TagSupport {
 	}
 	
     public int doStartTag() throws JspException {
-	    pageContext.setAttribute(var, sparqlURL, scope);
-    	return SKIP_BODY;
+    	logger.debug("setting var " + var + " to " + sparqlURL);
+    	endpoint = new Endpoint(sparqlURL);
+	    pageContext.setAttribute(var, endpoint, scope);
+    	return EVAL_BODY_INCLUDE;
     }
     
     public void release() {

@@ -12,7 +12,7 @@
 	<tag>
 		<description>Executes the SPARQL query defined in its body or through the sparql attribute.</description>
 		<name>query</name>
-		<tag-class>edu.uiowa.slis.SPARQLTagLib.Query</tag-class>
+		<tag-class>edu.uiowa.slis.SPARQLTagLib.QueryTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<description>Name of the exported scoped variable for the query result. The type of the scoped variable is
@@ -34,22 +34,22 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<description>Data source associated with the endpoint to query.</description>
-			<name>dataSource</name>
+			<description>Endpoint associated with the endpoint to query.</description>
+			<name>endpoint</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 
 	<tag>
-		<description>Creates a simple DataSource suitable only for prototyping.</description>
-		<name>setDataSource</name>
-		<tag-class>edu.uiowa.slis.SPARQLTagLib.SetDataSource</tag-class>
-		<body-content>empty</body-content>
+		<description>Creates a simple Endpoint suitable only for prototyping.</description>
+		<name>setEndpoint</name>
+		<tag-class>edu.uiowa.slis.SPARQLTagLib.SetEndpointTag</tag-class>
+		<body-content>JSP</body-content>
 		<attribute>
-			<description>Name of the exported scoped variable for the data source specified. Type can be String or DataSource.</description>
+			<description>Name of the exported scoped variable for the endpoint specified. Type can be String or Endpoint.</description>
 			<name>var</name>
-			<required>false</required>
+			<required>true</required>
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -60,8 +60,8 @@
 		</attribute>
 		<attribute>
 			<description>URL associated with the endpoint.</description>
-			<name>url</name>
-			<required>false</required>
+			<name>sparqlURL</name>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -75,6 +75,25 @@
 			<name>password</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<description>Defines a prefix for inclusion in a query.</description>
+		<name>prefix</name>
+		<tag-class>edu.uiowa.slis.SPARQLTagLib.PrefixTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>Name of the prefix.</description>
+			<name>prefix</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Base URI to be used for the prefix.</description>
+			<name>baseURI</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 	</tag>
 
