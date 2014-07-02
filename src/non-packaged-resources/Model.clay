@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clay-model clay-version="1.4.2">
+<database-model alias="" author="" begin-script="" end-script="" name="myModel3" remarks="" sql-dialect-id="jp.azzurri.clay.dialect.Postgre_7_3_Dialect" uid="34dcf4d9:12c7933ea8c:-7fe2" version="1.0">
+<database-model-description/>
+<schema-list>
+<schema alias="" name="RENAME_ME" remarks="" uid="34dcf4d9:12c7933ea8c:-7fdf">
+<schema-description/>
+<domain-list/>
+<table-list>
+<table alias="" name="TABLE_1" remarks="" uid="34dcf4d9:12c7933ea8c:-7fe1">
+<table-description/>
+<table-figure-bounds height="293" width="267" x="23" y="90"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="table1_id" remarks="" uid="34dcf4d9:12c7933ea8c:-7fdc">
+<column-description/>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="table2_id" remarks="" uid="1fd92d16:12c9d12e6a4:-7fd2">
+<column-description/>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_TABLE_1" remarks="" uid="34dcf4d9:12c7933ea8c:-7fe0">
+<primary-key-description/>
+<primary-key-column name="table1_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_TABLE_1_1" on-delete="" on-update="" referenced-key="PK_TABLE_2" referenced-table="TABLE_2" referenced-table-schema="RENAME_ME" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="1fd92d16:12c9d12e6a4:-7fd3">
+<foreign-key-description/>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="table2_id" referenced-key-column-name="table2_id"/>
+</foreign-key>
+</foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="TABLE_2" remarks="" uid="34dcf4d9:12c7933ea8c:-7fd9">
+<table-description/>
+<table-figure-bounds height="341" width="171" x="506" y="164"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="table2_id" remarks="" uid="34dcf4d9:12c7933ea8c:-7fd5">
+<column-description/>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_TABLE_2" remarks="" uid="34dcf4d9:12c7933ea8c:-7fd8">
+<primary-key-description/>
+<primary-key-column name="table2_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list/>
+<index-list/>
+</table>
+</table-list>
+</schema>
+</schema-list>
+</database-model>
+</clay-model>

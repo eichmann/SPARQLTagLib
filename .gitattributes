@@ -1,1 +1,16 @@
 * text=auto !eol
+/.classpath -text
+/.project -text
+.settings/org.eclipse.jdt.core.prefs -text
+.settings/org.eclipse.m2e.core.prefs -text
+.settings/org.eclipse.wst.common.component -text
+.settings/org.eclipse.wst.common.project.facet.core.xml -text
+.settings/org.eclipse.wst.validation.prefs -text
+.settings/org.maven.ide.eclipse.prefs -text
+/pom.xml -text
+src/main/java/edu/uiowa/slis/SPARQLTagLib/Query.java -text
+src/main/java/edu/uiowa/slis/SPARQLTagLib/SetEndpoint.java -text
+src/main/resources/META-INF/taglib.tld -text
+src/non-packaged-resources/Model.clay -text
+src/test/java/edu/uiowa/slis/SPARQLTagLib/README.txt -text
+src/test/resources/README.txt -text

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+<!--  https://svn.java.net/svn/jstl~svn/trunk/impl/src/main/resources/META-INF/sql.tld -->
+
+	<tlib-version>2.1</tlib-version>
+	<short-name>SPARQLTagLib</short-name>
+	<uri>http://slis.uiowa.edu/SPARQL</uri>
+
+	<tag>
+		<description>Executes the SPARQL query defined in its body or through the sparql attribute.</description>
+		<name>query</name>
+		<tag-class>edu.uiowa.slis.SPARQLTagLib.Query</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>Name of the exported scoped variable for the query result. The type of the scoped variable is
+				javax.servlet.jsp.jstl.sql.Result (see Chapter 16 "Java APIs").</description>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Scope of var.</description>
+			<name>scope</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>SPARQL query statement.</description>
+			<name>sparql</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Data source associated with the endpoint to query.</description>
+			<name>dataSource</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<description>Creates a simple DataSource suitable only for prototyping.</description>
+		<name>setDataSource</name>
+		<tag-class>edu.uiowa.slis.SPARQLTagLib.SetDataSource</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>Name of the exported scoped variable for the data source specified. Type can be String or DataSource.</description>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Scope of the exported variable.</description>
+			<name>scope</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>URL associated with the endpoint.</description>
+			<name>url</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Endpoint user on whose behalf the connection to the endpoint is being made.</description>
+			<name>user</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>user password</description>
+			<name>password</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+</taglib>
