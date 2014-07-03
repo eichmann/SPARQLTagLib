@@ -8,10 +8,12 @@
 .settings/org.eclipse.wst.validation.prefs -text
 .settings/org.maven.ide.eclipse.prefs -text
 /pom.xml -text
+src/main/java/edu/uiowa/slis/SPARQLTagLib/ParameterTag.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/PrefixTag.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/QueryTag.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/SetEndpointTag.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/util/Endpoint.java -text
+src/main/java/edu/uiowa/slis/SPARQLTagLib/util/Parameter.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/util/Prefix.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/util/ResultImplementation.java -text
 src/main/resources/META-INF/taglib.tld -text

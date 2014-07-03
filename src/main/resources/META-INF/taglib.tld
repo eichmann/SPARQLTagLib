@@ -97,4 +97,23 @@
 		</attribute>
 	</tag>
 
+	<tag>
+		<description>Defines a parameter to constrain a query.</description>
+		<name>parameter</name>
+		<tag-class>edu.uiowa.slis.SPARQLTagLib.ParameterTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>Name of the parameter.</description>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Value of the parameter.</description>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+
 </taglib>

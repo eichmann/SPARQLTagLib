@@ -10,14 +10,16 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.log4j.Logger;
 import org.apache.taglibs.standard.tag.common.core.Util;
 
+import com.hp.hpl.jena.query.ParameterizedSparqlString;
+import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.Syntax;
 
 import edu.uiowa.slis.SPARQLTagLib.util.Endpoint;
+import edu.uiowa.slis.SPARQLTagLib.util.Parameter;
 import edu.uiowa.slis.SPARQLTagLib.util.Prefix;
 import edu.uiowa.slis.SPARQLTagLib.util.ResultImplementation;
 
@@ -32,6 +34,7 @@ public class QueryTag extends BodyTagSupport {
 	String sparql = null;
 	String sparqlStatement = null;
 	Vector<Prefix> prefixVector = new Vector<Prefix>();
+	Vector<Parameter> parameterVector = new Vector<Parameter>();
 	
 	private int scope = PageContext.PAGE_SCOPE;
 	private String var = null;
@@ -69,7 +72,7 @@ public class QueryTag extends BodyTagSupport {
     	}
 
     	logger.debug("sparqlStatement: " + sparqlStatement);
-
+    	
     	return SKIP_BODY;
     }
     
@@ -90,6 +93,10 @@ public class QueryTag extends BodyTagSupport {
 		prefixVector.add(prefix);
 	}
 	
+	public void addParameter(Parameter parameter) {
+		parameterVector.add(parameter);
+	}
+	
 	public String getPrefixesAsString() {
 		StringBuffer buffer = new StringBuffer();
 		for (Prefix thePrefix : prefixVector) {
@@ -99,8 +106,20 @@ public class QueryTag extends BodyTagSupport {
 	}
 
 	ResultSet getResultSet(String query, String endpoint) {
-		com.hp.hpl.jena.query.Query theClassQuery = QueryFactory.create(query, Syntax.syntaxARQ);
-		QueryExecution theClassExecution = QueryExecutionFactory.sparqlService(endpoint, theClassQuery);
+		Query theQuery = null;
+		
+		if (parameterVector.size() == 0) {
+			theQuery = QueryFactory.create(query, Syntax.syntaxARQ);
+		} else {
+	    	ParameterizedSparqlString parameterizedString = new ParameterizedSparqlString(sparqlStatement);
+	    	for (Parameter theParameter : parameterVector) {
+	    		parameterizedString.setLiteral(theParameter.getVar(), theParameter.getValue());
+	    	}
+	    	logger.debug("parameterized query: " + parameterizedString.toString());
+	    	theQuery = parameterizedString.asQuery();
+		}
+
+		QueryExecution theClassExecution = QueryExecutionFactory.sparqlService(endpoint, theQuery);
 		return theClassExecution.execSelect();
 	}
 
