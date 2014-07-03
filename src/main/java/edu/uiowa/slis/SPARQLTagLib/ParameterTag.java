@@ -15,6 +15,7 @@ public class ParameterTag extends TagSupport {
 
 	String var = null;
 	String value = null;
+	String type = "literal";
 	
 	Endpoint endpoint = null;
 	
@@ -26,6 +27,7 @@ public class ParameterTag extends TagSupport {
 	private void init() {
 		var = null;
 		value = null;
+		type = "literal";
 	}
 	
     public int doStartTag() throws JspException {
@@ -35,7 +37,7 @@ public class ParameterTag extends TagSupport {
     	    throw new JspTagException("No SPARQL query for parameter specified");
 		
 		if (theQueryTag != null)
-			theQueryTag.addParameter(new Parameter(var, value));
+			theQueryTag.addParameter(new Parameter(var, value, type));
 		
 		logger.debug("parameter " + var + " : " + value);
     	return SKIP_BODY;
@@ -59,5 +61,13 @@ public class ParameterTag extends TagSupport {
 	
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public String getType() {
+		return type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
 	}
 }

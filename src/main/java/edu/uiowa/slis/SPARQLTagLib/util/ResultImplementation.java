@@ -70,6 +70,7 @@ public class ResultImplementation implements Result {
 		return rowCount;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public SortedMap[] getRows() {
 		if (rowMap == null)

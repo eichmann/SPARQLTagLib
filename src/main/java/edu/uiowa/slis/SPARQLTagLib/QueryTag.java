@@ -113,7 +113,10 @@ public class QueryTag extends BodyTagSupport {
 		} else {
 	    	ParameterizedSparqlString parameterizedString = new ParameterizedSparqlString(sparqlStatement);
 	    	for (Parameter theParameter : parameterVector) {
-	    		parameterizedString.setLiteral(theParameter.getVar(), theParameter.getValue());
+	    		if (theParameter.isIRI())
+	    			parameterizedString.setIri(theParameter.getVar(), theParameter.getValue());
+	    		else
+	    			parameterizedString.setLiteral(theParameter.getVar(), theParameter.getValue());
 	    	}
 	    	logger.debug("parameterized query: " + parameterizedString.toString());
 	    	theQuery = parameterizedString.asQuery();

@@ -114,6 +114,12 @@
 			<required>true</required>
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
+		<attribute>
+			<description>Type of the parameter. Can be "literal" (default) or IRI</description>
+			<name>type</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
 	</tag>
 
 </taglib>
