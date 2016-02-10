@@ -28,106 +28,106 @@ import edu.uiowa.slis.SPARQLTagLib.util.ResultImplementation;
 
 @SuppressWarnings("serial")
 public class QueryTag extends BodyTagSupport {
-	static Logger logger = Logger.getLogger(QueryTag.class);
+    static Logger logger = Logger.getLogger(QueryTag.class);
 
-	Endpoint endpoint = null;
-	String sparql = null;
-	String sparqlStatement = null;
-	Vector<Prefix> prefixVector = new Vector<Prefix>();
-	Vector<Parameter> parameterVector = new Vector<Parameter>();
-	
-	private int scope = PageContext.PAGE_SCOPE;
-	private String var = null;
-	
-	public QueryTag() {
-		super();
-		init();
-	}
-	
-	private void init() {
-		endpoint = null;
-		sparql = null;
-		
-		scope = PageContext.PAGE_SCOPE;
-		var = null;
-	}
-	
+    Endpoint endpoint = null;
+    String sparql = null;
+    String sparqlStatement = null;
+    Vector<Prefix> prefixVector = new Vector<Prefix>();
+    Vector<Parameter> parameterVector = new Vector<Parameter>();
+
+    private int scope = PageContext.PAGE_SCOPE;
+    private String var = null;
+
+    public QueryTag() {
+	super();
+	init();
+    }
+
+    private void init() {
+	endpoint = null;
+	sparql = null;
+
+	scope = PageContext.PAGE_SCOPE;
+	var = null;
+    }
+
     public int doAfterBody() throws JspException {
-    	String bodyContent = super.getBodyContent().getString();
+	String bodyContent = super.getBodyContent().getString();
 
-    	logger.debug("endpoint: " + endpoint.getUrl());
-    	logger.debug("endpoint prefix(es): " + endpoint.getPrefixesAsString());
-    	logger.debug("query prefix(es): " + getPrefixesAsString());
-    	logger.debug("sparql: " + sparql);
-    	logger.debug("tag body: " + bodyContent);
-    	
-    	if (sparql != null) {
-    		sparqlStatement = endpoint.getPrefixesAsString() + getPrefixesAsString() + sparql;
-    	} else if (bodyContent != null) {
-    		sparqlStatement = endpoint.getPrefixesAsString() + getPrefixesAsString() + bodyContent;
-    	}
-    	
-    	if (sparql == null && bodyContent.trim().length() == 0) {
-    	    throw new JspTagException("No SPARQL query specified");
-    	}
+	logger.debug("endpoint: " + endpoint.getUrl());
+	logger.debug("endpoint prefix(es): " + endpoint.getPrefixesAsString());
+	logger.debug("query prefix(es): " + getPrefixesAsString());
+	logger.debug("sparql: " + sparql);
+	logger.debug("tag body: " + bodyContent);
 
-    	logger.debug("sparqlStatement: " + sparqlStatement);
-    	
-    	return SKIP_BODY;
+	if (sparql != null) {
+	    sparqlStatement = endpoint.getPrefixesAsString() + getPrefixesAsString() + sparql;
+	} else if (bodyContent != null) {
+	    sparqlStatement = endpoint.getPrefixesAsString() + getPrefixesAsString() + bodyContent;
+	}
+
+	if (sparql == null && bodyContent.trim().length() == 0) {
+	    throw new JspTagException("No SPARQL query specified");
+	}
+
+	logger.debug("sparqlStatement: " + sparqlStatement);
+
+	return SKIP_BODY;
     }
-    
+
     public int doEndTag() throws JspException {
-    	ResultSet crs = getResultSet(sparqlStatement, endpoint.getUrl());
-//		while (crs.hasNext()) {
-//			QuerySolution sol = crs.nextSolution();
-//			logger.debug("solution: " + sol);
-//		}
-    	pageContext.setAttribute(var, new ResultImplementation(crs), scope);
-    	return EVAL_PAGE;
+	ResultSet crs = getResultSet(sparqlStatement, endpoint.getUrl());
+	// while (crs.hasNext()) {
+	// QuerySolution sol = crs.nextSolution();
+	// logger.debug("solution: " + sol);
+	// }
+	pageContext.setAttribute(var, new ResultImplementation(crs), scope);
+	return EVAL_PAGE;
     }
-    
+
     public void doFinally() {
     }
-    
-	public void addPrefix(Prefix prefix) {
-		prefixVector.add(prefix);
+
+    public void addPrefix(Prefix prefix) {
+	prefixVector.add(prefix);
+    }
+
+    public void addParameter(Parameter parameter) {
+	parameterVector.add(parameter);
+    }
+
+    public String getPrefixesAsString() {
+	StringBuffer buffer = new StringBuffer();
+	for (Prefix thePrefix : prefixVector) {
+	    buffer.append(thePrefix.toString() + "\n");
 	}
-	
-	public void addParameter(Parameter parameter) {
-		parameterVector.add(parameter);
-	}
-	
-	public String getPrefixesAsString() {
-		StringBuffer buffer = new StringBuffer();
-		for (Prefix thePrefix : prefixVector) {
-			buffer.append(thePrefix.toString() + "\n");
-		}
-		return buffer.toString();
+	return buffer.toString();
+    }
+
+    ResultSet getResultSet(String query, String endpoint) {
+	Query theQuery = null;
+
+	if (parameterVector.size() == 0) {
+	    theQuery = QueryFactory.create(query, Syntax.syntaxARQ);
+	} else {
+	    ParameterizedSparqlString parameterizedString = new ParameterizedSparqlString(sparqlStatement);
+	    for (Parameter theParameter : parameterVector) {
+		if (theParameter.isIRI())
+		    parameterizedString.setIri(theParameter.getVar(), theParameter.getValue());
+		else
+		    parameterizedString.setLiteral(theParameter.getVar(), theParameter.getValue());
+	    }
+	    logger.debug("parameterized query: " + parameterizedString.toString());
+	    theQuery = parameterizedString.asQuery();
 	}
 
-	ResultSet getResultSet(String query, String endpoint) {
-		Query theQuery = null;
-		
-		if (parameterVector.size() == 0) {
-			theQuery = QueryFactory.create(query, Syntax.syntaxARQ);
-		} else {
-	    	ParameterizedSparqlString parameterizedString = new ParameterizedSparqlString(sparqlStatement);
-	    	for (Parameter theParameter : parameterVector) {
-	    		if (theParameter.isIRI())
-	    			parameterizedString.setIri(theParameter.getVar(), theParameter.getValue());
-	    		else
-	    			parameterizedString.setLiteral(theParameter.getVar(), theParameter.getValue());
-	    	}
-	    	logger.debug("parameterized query: " + parameterizedString.toString());
-	    	theQuery = parameterizedString.asQuery();
-		}
+	QueryExecution theClassExecution = QueryExecutionFactory.sparqlService(endpoint, theQuery);
+	return theClassExecution.execSelect();
+    }
 
-		QueryExecution theClassExecution = QueryExecutionFactory.sparqlService(endpoint, theQuery);
-		return theClassExecution.execSelect();
-	}
-
-	public void setScope(String scope) {
-        this.scope = Util.getScope(scope);
+    public void setScope(String scope) {
+	this.scope = Util.getScope(scope);
     }
 
     public void setVar(String var) {
@@ -135,18 +135,18 @@ public class QueryTag extends BodyTagSupport {
     }
 
     public String getSparql() {
-		return sparql;
-	}
-	
-	public void setSparql(String sparql) {
-		this.sparql = sparql;
-	}
+	return sparql;
+    }
+
+    public void setSparql(String sparql) {
+	this.sparql = sparql;
+    }
 
     public Endpoint getEndpoint() {
-		return endpoint;
-	}
-	
-	public void setEndpoint(Endpoint endpoint) {
-		this.endpoint = endpoint;
-	}
+	return endpoint;
+    }
+
+    public void setEndpoint(Endpoint endpoint) {
+	this.endpoint = endpoint;
+    }
 }

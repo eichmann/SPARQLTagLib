@@ -11,44 +11,44 @@ import edu.uiowa.slis.SPARQLTagLib.util.Endpoint;
 
 @SuppressWarnings("serial")
 public class SetEndpointTag extends TagSupport {
-	static Logger logger = Logger.getLogger(SetEndpointTag.class);
+    static Logger logger = Logger.getLogger(SetEndpointTag.class);
 
-	String sparqlURL = null;
-	String user = null;
-	String password = null;
-	
-	Endpoint endpoint = null;
-	
-	private int scope = PageContext.PAGE_SCOPE;
-	private String var = null;
-	
-	public SetEndpointTag() {
-		super();
-		init();
-	}
-	
-	private void init() {
-		sparqlURL = null;
-		user = null;
-		password = null;
-		
-		scope = PageContext.PAGE_SCOPE;
-		var = null;
-	}
-	
+    String sparqlURL = null;
+    String user = null;
+    String password = null;
+
+    Endpoint endpoint = null;
+
+    private int scope = PageContext.PAGE_SCOPE;
+    private String var = null;
+
+    public SetEndpointTag() {
+	super();
+	init();
+    }
+
+    private void init() {
+	sparqlURL = null;
+	user = null;
+	password = null;
+
+	scope = PageContext.PAGE_SCOPE;
+	var = null;
+    }
+
     public int doStartTag() throws JspException {
-    	logger.debug("setting var " + var + " to " + sparqlURL);
-    	endpoint = new Endpoint(sparqlURL);
-	    pageContext.setAttribute(var, endpoint, scope);
-    	return EVAL_BODY_INCLUDE;
+	logger.debug("setting var " + var + " to " + sparqlURL);
+	endpoint = new Endpoint(sparqlURL);
+	pageContext.setAttribute(var, endpoint, scope);
+	return EVAL_BODY_INCLUDE;
     }
-    
+
     public void release() {
-    	init();
+	init();
     }
-    
+
     public void setScope(String scope) {
-        this.scope = Util.getScope(scope);
+	this.scope = Util.getScope(scope);
     }
 
     public void setVar(String var) {
@@ -56,27 +56,27 @@ public class SetEndpointTag extends TagSupport {
     }
 
     public String getSparqlURL() {
-		return sparqlURL;
-	}
-	
-	public void setSparqlURL(String sparqlURL) {
-		this.sparqlURL = sparqlURL;
-	}
-	
-	public String getUser() {
-		return user;
-	}
-	
-	public void setUser(String user) {
-		this.user = user;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-	
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	return sparqlURL;
+    }
+
+    public void setSparqlURL(String sparqlURL) {
+	this.sparqlURL = sparqlURL;
+    }
+
+    public String getUser() {
+	return user;
+    }
+
+    public void setUser(String user) {
+	this.user = user;
+    }
+
+    public String getPassword() {
+	return password;
+    }
+
+    public void setPassword(String password) {
+	this.password = password;
+    }
 
 }

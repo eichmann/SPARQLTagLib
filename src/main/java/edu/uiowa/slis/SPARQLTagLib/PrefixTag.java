@@ -11,57 +11,57 @@ import edu.uiowa.slis.SPARQLTagLib.util.Prefix;
 
 @SuppressWarnings("serial")
 public class PrefixTag extends TagSupport {
-	static Logger logger = Logger.getLogger(PrefixTag.class);
+    static Logger logger = Logger.getLogger(PrefixTag.class);
 
-	String prefix = null;
-	String baseURI = null;
-	
-	Endpoint endpoint = null;
-	
-	public PrefixTag() {
-		super();
-		init();
-	}
-	
-	private void init() {
-		prefix = null;
-		baseURI = null;
-	}
-	
+    String prefix = null;
+    String baseURI = null;
+
+    Endpoint endpoint = null;
+
+    public PrefixTag() {
+	super();
+	init();
+    }
+
+    private void init() {
+	prefix = null;
+	baseURI = null;
+    }
+
     public int doStartTag() throws JspException {
-		SetEndpointTag theEndpointTag = (SetEndpointTag)findAncestorWithClass(this, SetEndpointTag.class);
-		QueryTag theQueryTag = (QueryTag)findAncestorWithClass(this, QueryTag.class);
+	SetEndpointTag theEndpointTag = (SetEndpointTag) findAncestorWithClass(this, SetEndpointTag.class);
+	QueryTag theQueryTag = (QueryTag) findAncestorWithClass(this, QueryTag.class);
 
-		if (theEndpointTag == null && theQueryTag == null)
-    	    throw new JspTagException("No SPARQL endpoint for prefix specified");
-		
-		if (theEndpointTag != null)
-			theEndpointTag.endpoint.addPrefix(new Prefix(prefix, baseURI));
-		
-		if (theQueryTag != null)
-			theQueryTag.addPrefix(new Prefix(prefix, baseURI));
-		
-		logger.debug("prefix " + prefix + " : " + baseURI);
-    	return SKIP_BODY;
+	if (theEndpointTag == null && theQueryTag == null)
+	    throw new JspTagException("No SPARQL endpoint for prefix specified");
+
+	if (theEndpointTag != null)
+	    theEndpointTag.endpoint.addPrefix(new Prefix(prefix, baseURI));
+
+	if (theQueryTag != null)
+	    theQueryTag.addPrefix(new Prefix(prefix, baseURI));
+
+	logger.debug("prefix " + prefix + " : " + baseURI);
+	return SKIP_BODY;
     }
-    
+
     public void release() {
-    	init();
+	init();
     }
-    
+
     public String getPrefix() {
-		return prefix;
-	}
-	
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
-	
-	public String getBaseURI() {
-		return baseURI;
-	}
-	
-	public void setBaseURI(String baseURI) {
-		this.baseURI = baseURI;
-	}
+	return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+	this.prefix = prefix;
+    }
+
+    public String getBaseURI() {
+	return baseURI;
+    }
+
+    public void setBaseURI(String baseURI) {
+	this.baseURI = baseURI;
+    }
 }
