@@ -30,10 +30,14 @@ public class PrefixTag extends TagSupport {
 
     public int doStartTag() throws JspException {
 	SetEndpointTag theEndpointTag = (SetEndpointTag) findAncestorWithClass(this, SetEndpointTag.class);
+	SetTriplestoreTag theTriplestoreTag = (SetTriplestoreTag) findAncestorWithClass(this, SetTriplestoreTag.class);
 	QueryTag theQueryTag = (QueryTag) findAncestorWithClass(this, QueryTag.class);
 
-	if (theEndpointTag == null && theQueryTag == null)
-	    throw new JspTagException("No SPARQL endpoint for prefix specified");
+	if (theEndpointTag == null && theTriplestoreTag == null && theQueryTag == null)
+	    throw new JspTagException("No SPARQL endpoint or triplestore for prefix specified");
+
+	if (theTriplestoreTag != null)
+	    theTriplestoreTag.triplestore.addPrefix(new Prefix(prefix, baseURI));
 
 	if (theEndpointTag != null)
 	    theEndpointTag.endpoint.addPrefix(new Prefix(prefix, baseURI));

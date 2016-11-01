@@ -10,18 +10,19 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.log4j.Logger;
 import org.apache.taglibs.standard.tag.common.core.Util;
 
-import com.hp.hpl.jena.query.ParameterizedSparqlString;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.Syntax;
+import org.apache.jena.query.ParameterizedSparqlString;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.Syntax;
 
 import edu.uiowa.slis.SPARQLTagLib.util.Endpoint;
 import edu.uiowa.slis.SPARQLTagLib.util.Parameter;
 import edu.uiowa.slis.SPARQLTagLib.util.Prefix;
 import edu.uiowa.slis.SPARQLTagLib.util.ResultImplementation;
+import edu.uiowa.slis.SPARQLTagLib.util.Triplestore;
 
 // base for cloning: https://svn.java.net/svn/jstl~svn/trunk/impl/src/main/java/org/apache/taglibs/standard/tag/
 // https://svn.java.net/svn/jstl~svn/trunk/impl/src/main/java/org/apache/taglibs/standard/tag/common/sql/QueryTagSupport.java
@@ -31,6 +32,7 @@ public class QueryTag extends BodyTagSupport {
     static Logger logger = Logger.getLogger(QueryTag.class);
 
     Endpoint endpoint = null;
+    Triplestore triplestore = null;
     String sparql = null;
     String sparqlStatement = null;
     Vector<Prefix> prefixVector = new Vector<Prefix>();
@@ -55,20 +57,32 @@ public class QueryTag extends BodyTagSupport {
     public int doAfterBody() throws JspException {
 	String bodyContent = super.getBodyContent().getString();
 
-	logger.debug("endpoint: " + endpoint.getUrl());
-	logger.debug("endpoint prefix(es): " + endpoint.getPrefixesAsString());
+	if (endpoint != null) {
+	    logger.debug("endpoint: " + endpoint.getUrl());
+	    logger.debug("endpoint prefix(es): " + endpoint.getPrefixesAsString());
+	}
+	if (triplestore != null) {
+	    logger.debug("triplestore: " + triplestore.getContainer());
+	    logger.debug("triplestore prefix(es): " + triplestore.getPrefixesAsString());
+	}
 	logger.debug("query prefix(es): " + getPrefixesAsString());
 	logger.debug("sparql: " + sparql);
 	logger.debug("tag body: " + bodyContent);
 
 	if (sparql != null) {
 	    sparqlStatement = endpoint.getPrefixesAsString() + getPrefixesAsString() + sparql;
-	} else if (bodyContent != null) {
+	} else if (bodyContent != null && endpoint != null) {
 	    sparqlStatement = endpoint.getPrefixesAsString() + getPrefixesAsString() + bodyContent;
+	} else if (bodyContent != null && triplestore != null) {
+	    sparqlStatement = triplestore.getPrefixesAsString() + getPrefixesAsString() + bodyContent;
 	}
 
 	if (sparql == null && bodyContent.trim().length() == 0) {
 	    throw new JspTagException("No SPARQL query specified");
+	}
+
+	if (endpoint == null && triplestore == null) {
+	    throw new JspTagException("No endpoint or triplestore specified");
 	}
 
 	logger.debug("sparqlStatement: " + sparqlStatement);
@@ -77,11 +91,18 @@ public class QueryTag extends BodyTagSupport {
     }
 
     public int doEndTag() throws JspException {
-	ResultSet crs = getResultSet(sparqlStatement, endpoint.getUrl());
-	// while (crs.hasNext()) {
-	// QuerySolution sol = crs.nextSolution();
-	// logger.debug("solution: " + sol);
-	// }
+	ResultSet crs = null;
+	
+	if (endpoint != null)
+	    crs = getResultSet(sparqlStatement, endpoint.getUrl());
+	if (triplestore != null)
+	    try {
+		crs = triplestore.getResultSet(sparqlStatement);
+	    } catch (Exception e) {
+		logger.error("Error raised calling support tag: ", e);
+		throw new JspException("Error raised calling support tag");
+	    }
+
 	pageContext.setAttribute(var, new ResultImplementation(crs), scope);
 	return EVAL_PAGE;
     }
@@ -148,5 +169,13 @@ public class QueryTag extends BodyTagSupport {
 
     public void setEndpoint(Endpoint endpoint) {
 	this.endpoint = endpoint;
+    }
+
+    public Triplestore getTriplestore() {
+        return triplestore;
+    }
+
+    public void setTriplestore(Triplestore triplestore) {
+        this.triplestore = triplestore;
     }
 }

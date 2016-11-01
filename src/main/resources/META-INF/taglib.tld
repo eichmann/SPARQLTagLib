@@ -16,7 +16,7 @@
 		<body-content>JSP</body-content>
 		<attribute>
 			<description>Name of the exported scoped variable for the query result. The type of the scoped variable is
-				javax.servlet.jsp.jstl.sql.Result (see Chapter 16 "Java APIs").</description>
+				org.apache.jena.query.ResultSet.</description>
 			<name>var</name>
 			<required>true</required>
 			<rtexprvalue>false</rtexprvalue>
@@ -39,6 +39,12 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+        <attribute>
+            <description>Triplestore associated with the triplestore to query.</description>
+            <name>triplestore</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
 	</tag>
 
 	<tag>
@@ -77,6 +83,43 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+
+    <tag>
+        <description>Creates a Triplestore.</description>
+        <name>setTriplestore</name>
+        <tag-class>edu.uiowa.slis.SPARQLTagLib.SetTriplestoreTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>Name of the exported scoped variable for the triplestore specified. Type can be String or Triplestore.</description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Scope of the exported variable.</description>
+            <name>scope</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Class path associated with the class containing the query constructor.</description>
+            <name>container</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Triplestore user on whose behalf the connection to the triplestore is being made.</description>
+            <name>user</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>user password</description>
+            <name>password</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 
 	<tag>
 		<description>Defines a prefix for inclusion in a query.</description>

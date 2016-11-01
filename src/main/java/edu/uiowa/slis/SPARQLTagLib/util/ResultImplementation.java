@@ -7,11 +7,11 @@ import java.util.TreeMap;
 
 import javax.servlet.jsp.jstl.sql.Result;
 
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 
 public class ResultImplementation implements Result {
     static Logger logger = Logger.getLogger(ResultImplementation.class);
@@ -30,6 +30,8 @@ public class ResultImplementation implements Result {
 
 	while (rs.hasNext()) {
 	    QuerySolution solution = rs.next();
+	    
+	    logger.info("solution: " + solution);
 
 	    Object[] columns = new Object[columnCount];
 	    SortedMap<String, Object> columnMap = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
@@ -37,6 +39,7 @@ public class ResultImplementation implements Result {
 	    // JDBC uses 1 as the lowest index!
 	    for (int i = 0; i < columnCount; i++) {
 		RDFNode node = solution.get(columnNames[i]);
+		logger.info("var " + columnNames[i] + ": " + node);
 		Object value = node.isLiteral() ? node.asLiteral().getString() : node.toString();
 		logger.trace("row: " + rowCount + "\tcolumn: " + columnNames[i] + " : " + value);
 		columns[i] = value;

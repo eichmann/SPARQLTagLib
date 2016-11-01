@@ -12,10 +12,12 @@ src/main/java/edu/uiowa/slis/SPARQLTagLib/ParameterTag.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/PrefixTag.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/QueryTag.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/SetEndpointTag.java -text
+src/main/java/edu/uiowa/slis/SPARQLTagLib/SetTriplestoreTag.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/util/Endpoint.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/util/Parameter.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/util/Prefix.java -text
 src/main/java/edu/uiowa/slis/SPARQLTagLib/util/ResultImplementation.java -text
+src/main/java/edu/uiowa/slis/SPARQLTagLib/util/Triplestore.java -text
 src/main/resources/META-INF/taglib.tld -text
 src/non-packaged-resources/Model.clay -text
 src/test/java/edu/uiowa/slis/SPARQLTagLib/README.txt -text

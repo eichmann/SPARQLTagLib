@@ -63,21 +63,17 @@
   	<artifactId>jstl</artifactId>
   	<version>1.2</version>
   </dependency>
-  <dependency>
-  	<groupId>org.apache.jena</groupId>
-  	<artifactId>jena-arq</artifactId>
-  	<version>2.11.2</version>
-  </dependency>
-  <dependency>
-  	<groupId>org.apache.jena</groupId>
-  	<artifactId>jena-core</artifactId>
-  	<version>2.11.2</version>
-  </dependency>
-  <dependency>
-  	<groupId>javax.servlet.jsp</groupId>
-  	<artifactId>jsp-api</artifactId>
-  	<version>2.1</version>
-  </dependency>
+<dependency>
+    <groupId>org.apache.jena</groupId>
+    <artifactId>apache-jena-libs</artifactId>
+    <type>pom</type>
+    <version>3.0.0</version>
+    </dependency>
+  	<dependency>
+  		<groupId>javax.servlet</groupId>
+  		<artifactId>jsp-api</artifactId>
+  		<version>2.0</version>
+  	</dependency>
   </dependencies>
 	<build>
 	  	<plugins>
