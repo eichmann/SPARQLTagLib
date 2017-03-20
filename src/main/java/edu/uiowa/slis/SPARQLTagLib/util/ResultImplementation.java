@@ -33,7 +33,7 @@ public class ResultImplementation implements Result {
 	while (rs.hasNext()) {
 	    QuerySolution solution = rs.next();
 	    
-	    logger.info("solution: " + solution);
+	    logger.debug("solution: " + solution);
 
 	    Object[] columns = new Object[columnCount];
 	    SortedMap<String, Object> columnMap = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
@@ -41,7 +41,7 @@ public class ResultImplementation implements Result {
 	    // JDBC uses 1 as the lowest index!
 	    for (int i = 0; i < columnCount; i++) {
 		RDFNode node = solution.get(columnNames[i]);
-		logger.info("var " + columnNames[i] + ": " + node);
+		logger.debug("var " + columnNames[i] + ": " + node);
 		Object value = rawMode ? ( node.isLiteral() ? "\""+node.asLiteral().getString().replace("\"", "\\\"")+"\""+(node.asLiteral().getLanguage() == null ? "" : "@"+node.asLiteral().getLanguage()) : "<"+node.toString()+">" )
 					: ( node.isLiteral() ? node.asLiteral().getString() : node.toString() );
 		logger.trace("row: " + rowCount + "\tcolumn: " + columnNames[i] + " : " + value);
