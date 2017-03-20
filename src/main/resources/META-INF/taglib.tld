@@ -22,11 +22,18 @@
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<description>Scope of var.</description>
-			<name>scope</name>
+			<description>Format of ResultSet "literal" (the default) returns bare values. "triple" returns values suitable for composing
+			    as a triple with no additional formatting.</description>
+			<name>resultType</name>
 			<required>false</required>
-			<rtexprvalue>false</rtexprvalue>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+        <attribute>
+            <description>Scope of var.</description>
+            <name>scope</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
 		<attribute>
 			<description>SPARQL query statement.</description>
 			<name>sparql</name>
@@ -155,13 +162,13 @@
 			<description>Value of the parameter.</description>
 			<name>value</name>
 			<required>true</required>
-			<rtexprvalue>false</rtexprvalue>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description>Type of the parameter. Can be "literal" (default) or IRI</description>
 			<name>type</name>
 			<required>false</required>
-			<rtexprvalue>false</rtexprvalue>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 

@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 public class ResultImplementation implements Result {
     static Logger logger = Logger.getLogger(ResultImplementation.class);
     ResultSet rs = null;
+    boolean rawMode = false;
 
     private List<SortedMap<String, Object>> rowMap = new ArrayList<SortedMap<String, Object>>();
     private List<Object[]> rowByIndex = new ArrayList<Object[]>();
@@ -23,8 +24,9 @@ public class ResultImplementation implements Result {
     int columnCount = 0;
     int rowCount = 0;
 
-    public ResultImplementation(ResultSet rs) {
+    public ResultImplementation(ResultSet rs, boolean rawMode) {
 	this.rs = rs;
+	this.rawMode = rawMode;
 	columnNames = getColumnNames();
 	columnCount = columnNames.length;
 
@@ -40,7 +42,8 @@ public class ResultImplementation implements Result {
 	    for (int i = 0; i < columnCount; i++) {
 		RDFNode node = solution.get(columnNames[i]);
 		logger.info("var " + columnNames[i] + ": " + node);
-		Object value = node.isLiteral() ? node.asLiteral().getString() : node.toString();
+		Object value = rawMode ? ( node.isLiteral() ? "\""+node.asLiteral().getString().replace("\"", "\\\"")+"\""+(node.asLiteral().getLanguage() == null ? "" : "@"+node.asLiteral().getLanguage()) : "<"+node.toString()+">" )
+					: ( node.isLiteral() ? node.asLiteral().getString() : node.toString() );
 		logger.trace("row: " + rowCount + "\tcolumn: " + columnNames[i] + " : " + value);
 		columns[i] = value;
 		columnMap.put(columnNames[i], value);

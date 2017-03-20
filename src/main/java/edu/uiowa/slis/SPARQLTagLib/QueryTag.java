@@ -31,6 +31,7 @@ import edu.uiowa.slis.SPARQLTagLib.util.Triplestore;
 public class QueryTag extends BodyTagSupport {
     static Logger logger = Logger.getLogger(QueryTag.class);
 
+    String resultType = "literal";
     Endpoint endpoint = null;
     Triplestore triplestore = null;
     String sparql = null;
@@ -103,7 +104,7 @@ public class QueryTag extends BodyTagSupport {
 		throw new JspException("Error raised calling support tag");
 	    }
 
-	pageContext.setAttribute(var, new ResultImplementation(crs), scope);
+	pageContext.setAttribute(var, new ResultImplementation(crs, "triple".equals(resultType)), scope);
 	return EVAL_PAGE;
     }
 
@@ -177,5 +178,13 @@ public class QueryTag extends BodyTagSupport {
 
     public void setTriplestore(Triplestore triplestore) {
         this.triplestore = triplestore;
+    }
+
+    public String getResultType() {
+        return resultType;
+    }
+
+    public void setResultType(String resultType) {
+        this.resultType = resultType;
     }
 }
