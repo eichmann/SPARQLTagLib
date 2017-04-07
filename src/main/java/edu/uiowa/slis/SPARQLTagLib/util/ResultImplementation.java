@@ -42,7 +42,8 @@ public class ResultImplementation implements Result {
 	    for (int i = 0; i < columnCount; i++) {
 		RDFNode node = solution.get(columnNames[i]);
 		logger.debug("var " + columnNames[i] + ": " + node);
-		Object value = rawMode ? ( node.isLiteral() ? "\""+node.asLiteral().getString().replace("\"", "\\\"").replace("\n", "\\n")+"\""+(node.asLiteral().getLanguage() == null ? "" : "@"+node.asLiteral().getLanguage()) : "<"+node.toString()+">" )
+		Object value = node == null ? null
+				: rawMode ? ( node.isLiteral() ? "\""+node.asLiteral().getString().replace("\"", "\\\"").replace("\n", "\\n")+"\""+(node.asLiteral().getLanguage() == null ? "" : "@"+node.asLiteral().getLanguage()) : "<"+node.toString()+">" )
 					: ( node.isLiteral() ? node.asLiteral().getString() : node.toString() );
 		logger.trace("row: " + rowCount + "\tcolumn: " + columnNames[i] + " : " + value);
 		columns[i] = value;
