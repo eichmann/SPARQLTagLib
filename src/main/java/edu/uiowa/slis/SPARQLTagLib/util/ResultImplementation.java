@@ -1,6 +1,7 @@
 package edu.uiowa.slis.SPARQLTagLib.util;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -23,6 +24,9 @@ public class ResultImplementation implements Result {
     String[] columnNames = null;
     int columnCount = 0;
     int rowCount = 0;
+    
+    int blankNodeCount = 0;
+    Hashtable<String,String> blankNodeHash = new Hashtable<String,String> ();
 
     public ResultImplementation(ResultSet rs, boolean rawMode) {
 	this.rs = rs;
@@ -41,10 +45,12 @@ public class ResultImplementation implements Result {
 	    // JDBC uses 1 as the lowest index!
 	    for (int i = 0; i < columnCount; i++) {
 		RDFNode node = solution.get(columnNames[i]);
-		logger.debug("var " + columnNames[i] + ": " + node);
+		logger.debug("var " + columnNames[i] + ": " + node + "\tliteral: " + node.isLiteral() + "\tanon: " + node.isAnon());
 		Object value = node == null ? null
-				: rawMode ? ( node.isLiteral() ? "\""+node.asLiteral().getString().replace("\"", "\\\"").replace("\n", "\\n")+"\""+(node.asLiteral().getLanguage() == null ? "" : "@"+node.asLiteral().getLanguage()) : "<"+node.toString()+">" )
-					: ( node.isLiteral() ? node.asLiteral().getString() : node.toString() );
+				: rawMode ? ( node.isLiteral() ? "\""+node.asLiteral().getString().replace("\"", "\\\"").replace("\n", "\\n")+"\""+(node.asLiteral().getLanguage() == null || node.asLiteral().getLanguage().trim().length() == 0 ? "" : "@"+node.asLiteral().getLanguage().toLowerCase())
+							       : (node.isAnon() ? getBlankNodeLabel(node.toString())
+								       		: "<"+node+">" ))
+					  : ( node.isLiteral() ? node.asLiteral().getString() : node.toString() );
 		logger.trace("row: " + rowCount + "\tcolumn: " + columnNames[i] + " : " + value);
 		columns[i] = value;
 		columnMap.put(columnNames[i], value);
@@ -54,6 +60,17 @@ public class ResultImplementation implements Result {
 
 	    rowCount++;
 	}
+    }
+    
+    private String getBlankNodeLabel(String nodeLabel) {
+	String blankLabel = blankNodeHash.get(nodeLabel);
+	
+	if (blankLabel == null) {
+	    blankLabel = "_:b" + blankNodeCount++;
+	    blankNodeHash.put(nodeLabel, blankLabel);
+	}
+	
+	return blankLabel;
     }
 
     @Override

@@ -52,7 +52,145 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <description>Graph to query.</description>
+            <name>graph</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
 	</tag>
+
+    <tag>
+        <description>Executes the SPARQL ASK defined in its body or through the sparql attribute.</description>
+        <name>ask</name>
+        <tag-class>edu.uiowa.slis.SPARQLTagLib.AskTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>Name of the exported scoped variable for the query result. The type of the scoped variable is
+                org.apache.jena.query.ResultSet.</description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Scope of var.</description>
+            <name>scope</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>SPARQL statement.</description>
+            <name>sparql</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Endpoint associated with the endpoint to query.</description>
+            <name>endpoint</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Triplestore associated with the triplestore to query.</description>
+            <name>triplestore</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Graph to query.</description>
+            <name>graph</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>Executes the SPARQL CONSTRUCT defined in its body or through the sparql attribute.</description>
+        <name>construct</name>
+        <tag-class>edu.uiowa.slis.SPARQLTagLib.ConstructTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>Name of the exported scoped variable for the query result. The type of the scoped variable is
+                org.apache.jena.rdf.model.Model.</description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Scope of var.</description>
+            <name>scope</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>SPARQL statement.</description>
+            <name>sparql</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Endpoint associated with the endpoint to query.</description>
+            <name>endpoint</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Triplestore associated with the triplestore to query.</description>
+            <name>triplestore</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Graph to query.</description>
+            <name>graph</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>Executes the SPARQL DESCRIBE defined in its body or through the sparql attribute.</description>
+        <name>describe</name>
+        <tag-class>edu.uiowa.slis.SPARQLTagLib.DescribeTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>Name of the exported scoped variable for the statement result. The type of the scoped variable is
+                org.apache.jena.rdf.model.Model.</description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Scope of var.</description>
+            <name>scope</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>SPARQL statement.</description>
+            <name>sparql</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Endpoint associated with the endpoint to query.</description>
+            <name>endpoint</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Triplestore associated with the triplestore to query.</description>
+            <name>triplestore</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Graph to query.</description>
+            <name>graph</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 
 	<tag>
 		<description>Creates a simple Endpoint suitable only for prototyping.</description>
@@ -129,7 +267,7 @@
     </tag>
 
 	<tag>
-		<description>Defines a prefix for inclusion in a query.</description>
+		<description>Defines a prefix for inclusion in a statement.</description>
 		<name>prefix</name>
 		<tag-class>edu.uiowa.slis.SPARQLTagLib.PrefixTag</tag-class>
 		<body-content>empty</body-content>

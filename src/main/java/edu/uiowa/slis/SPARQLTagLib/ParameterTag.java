@@ -31,13 +31,34 @@ public class ParameterTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
+	ConstructTag theConstructTag = null;
+	DescribeTag theDescribeTag = null;
+	AskTag theAskTag = null;
 	QueryTag theQueryTag = (QueryTag) findAncestorWithClass(this, QueryTag.class);
 
 	if (theQueryTag == null)
-	    throw new JspTagException("No SPARQL query for parameter specified");
+	    theConstructTag = (ConstructTag) findAncestorWithClass(this, ConstructTag.class);
+
+	if (theQueryTag == null)
+	    theDescribeTag = (DescribeTag) findAncestorWithClass(this, DescribeTag.class);
+
+	if (theQueryTag == null)
+	    theAskTag = (AskTag) findAncestorWithClass(this, AskTag.class);
+
+	if (theQueryTag == null && theConstructTag == null && theDescribeTag == null && theAskTag == null)
+	    throw new JspTagException("No SPARQL statement for parameter specified");
 
 	if (theQueryTag != null)
 	    theQueryTag.addParameter(new Parameter(var, value, type));
+
+	if (theConstructTag != null)
+	    theConstructTag.addParameter(new Parameter(var, value, type));
+
+	if (theDescribeTag != null)
+	    theDescribeTag.addParameter(new Parameter(var, value, type));
+
+	if (theAskTag != null)
+	    theAskTag.addParameter(new Parameter(var, value, type));
 
 	logger.debug("parameter " + var + " : " + value);
 	return SKIP_BODY;

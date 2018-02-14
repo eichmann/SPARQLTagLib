@@ -37,7 +37,7 @@ public class SetEndpointTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-	logger.debug("setting var " + var + " to " + sparqlURL);
+	logger.info("setting endpoint var " + var + " to " + sparqlURL);
 	endpoint = new Endpoint(sparqlURL);
 	pageContext.setAttribute(var, endpoint, scope);
 	return EVAL_BODY_INCLUDE;

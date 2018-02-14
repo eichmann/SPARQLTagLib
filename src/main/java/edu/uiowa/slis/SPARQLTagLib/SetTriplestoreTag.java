@@ -37,7 +37,7 @@ public class SetTriplestoreTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-	logger.debug("setting var " + var + " to " + container);
+	logger.info("setting triplestore var " + var + " to " + container);
 	triplestore = new Triplestore(container);
 	pageContext.setAttribute(var, triplestore, scope);
 	return EVAL_BODY_INCLUDE;

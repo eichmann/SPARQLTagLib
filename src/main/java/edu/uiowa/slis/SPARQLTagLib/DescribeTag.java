@@ -15,24 +15,19 @@ import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.Syntax;
+import org.apache.jena.rdf.model.Model;
 
 import edu.uiowa.slis.SPARQLTagLib.util.Graph;
 import edu.uiowa.slis.SPARQLTagLib.util.Endpoint;
 import edu.uiowa.slis.SPARQLTagLib.util.Parameter;
 import edu.uiowa.slis.SPARQLTagLib.util.Prefix;
-import edu.uiowa.slis.SPARQLTagLib.util.ResultImplementation;
 import edu.uiowa.slis.SPARQLTagLib.util.Triplestore;
 
-// base for cloning: https://svn.java.net/svn/jstl~svn/trunk/impl/src/main/java/org/apache/taglibs/standard/tag/
-// https://svn.java.net/svn/jstl~svn/trunk/impl/src/main/java/org/apache/taglibs/standard/tag/common/sql/QueryTagSupport.java
-
 @SuppressWarnings("serial")
-public class QueryTag extends BodyTagSupport {
-    static Logger logger = Logger.getLogger(QueryTag.class);
+public class DescribeTag extends BodyTagSupport {
+    static Logger logger = Logger.getLogger(ConstructTag.class);
 
-    String resultType = "literal";
     Endpoint endpoint = null;
     Triplestore triplestore = null;
     Graph graph = null;
@@ -44,7 +39,7 @@ public class QueryTag extends BodyTagSupport {
     private int scope = PageContext.PAGE_SCOPE;
     private String var = null;
 
-    public QueryTag() {
+    public DescribeTag() {
 	super();
 	init();
     }
@@ -78,16 +73,14 @@ public class QueryTag extends BodyTagSupport {
 	    sparqlStatement = endpoint.getPrefixesAsString() + getPrefixesAsString() + bodyContent;
 	} else if (bodyContent != null && triplestore != null) {
 	    sparqlStatement = triplestore.getPrefixesAsString() + getPrefixesAsString() + bodyContent;
-	} else if (bodyContent != null && graph != null) {
-	    sparqlStatement = graph.getPrefixesAsString() + getPrefixesAsString() + bodyContent;
 	}
 
 	if (sparql == null && bodyContent.trim().length() == 0) {
 	    throw new JspTagException("No SPARQL query specified");
 	}
 
-	if (endpoint == null && triplestore == null && graph == null) {
-	    throw new JspTagException("No endpoint, triplestore or construct specified");
+	if (endpoint == null && triplestore == null) {
+	    throw new JspTagException("No endpoint or triplestore specified");
 	}
 
 	logger.info("sparqlStatement: " + sparqlStatement);
@@ -96,26 +89,20 @@ public class QueryTag extends BodyTagSupport {
     }
 
     public int doEndTag() throws JspException {
-	ResultSet crs = null;
+	Model model = null;
 	
 	if (endpoint != null)
-	    crs = getResultSet(sparqlStatement, endpoint.getUrl());
+	    model = getModel(sparqlStatement, endpoint.getUrl());
 	if (triplestore != null)
 	    try {
-		crs = triplestore.getResultSet(sparqlStatement);
-	    } catch (Exception e) {
-		logger.error("Error raised calling support tag: ", e);
-		throw new JspException("Error raised calling support tag");
-	    }
-	if (graph != null)
-	    try {
-		crs = graph.getResultSet(sparqlStatement);
+		model = triplestore.getModel(sparqlStatement);
 	    } catch (Exception e) {
 		logger.error("Error raised calling support tag: ", e);
 		throw new JspException("Error raised calling support tag");
 	    }
 
-	pageContext.setAttribute(var, new ResultImplementation(crs, "triple".equals(resultType)), scope);
+	logger.info("Describe " + var + " contains " + model.size() + " triples.");
+	pageContext.setAttribute(var, new Graph(model), scope);
 	return EVAL_PAGE;
     }
 
@@ -138,7 +125,7 @@ public class QueryTag extends BodyTagSupport {
 	return buffer.toString();
     }
 
-    ResultSet getResultSet(String query, String endpoint) {
+    Model getModel(String query, String endpoint) {
 	Query theQuery = null;
 
 	if (parameterVector.size() == 0) {
@@ -156,7 +143,7 @@ public class QueryTag extends BodyTagSupport {
 	}
 
 	QueryExecution theClassExecution = QueryExecutionFactory.sparqlService(endpoint, theQuery);
-	return theClassExecution.execSelect();
+	return theClassExecution.execDescribe();
     }
 
     public void setScope(String scope) {
@@ -197,13 +184,5 @@ public class QueryTag extends BodyTagSupport {
 
     public void setGraph(Graph graph) {
         this.graph = graph;
-    }
-
-    public String getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(String resultType) {
-        this.resultType = resultType;
     }
 }

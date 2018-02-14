@@ -15,24 +15,21 @@ import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.Syntax;
 
 import edu.uiowa.slis.SPARQLTagLib.util.Graph;
 import edu.uiowa.slis.SPARQLTagLib.util.Endpoint;
 import edu.uiowa.slis.SPARQLTagLib.util.Parameter;
 import edu.uiowa.slis.SPARQLTagLib.util.Prefix;
-import edu.uiowa.slis.SPARQLTagLib.util.ResultImplementation;
 import edu.uiowa.slis.SPARQLTagLib.util.Triplestore;
 
 // base for cloning: https://svn.java.net/svn/jstl~svn/trunk/impl/src/main/java/org/apache/taglibs/standard/tag/
 // https://svn.java.net/svn/jstl~svn/trunk/impl/src/main/java/org/apache/taglibs/standard/tag/common/sql/QueryTagSupport.java
 
 @SuppressWarnings("serial")
-public class QueryTag extends BodyTagSupport {
-    static Logger logger = Logger.getLogger(QueryTag.class);
+public class AskTag extends BodyTagSupport {
+    static Logger logger = Logger.getLogger(AskTag.class);
 
-    String resultType = "literal";
     Endpoint endpoint = null;
     Triplestore triplestore = null;
     Graph graph = null;
@@ -44,7 +41,7 @@ public class QueryTag extends BodyTagSupport {
     private int scope = PageContext.PAGE_SCOPE;
     private String var = null;
 
-    public QueryTag() {
+    public AskTag() {
 	super();
 	init();
     }
@@ -96,26 +93,26 @@ public class QueryTag extends BodyTagSupport {
     }
 
     public int doEndTag() throws JspException {
-	ResultSet crs = null;
+	boolean response = false;
 	
 	if (endpoint != null)
-	    crs = getResultSet(sparqlStatement, endpoint.getUrl());
+	    response = getAskResponse(sparqlStatement, endpoint.getUrl());
 	if (triplestore != null)
 	    try {
-		crs = triplestore.getResultSet(sparqlStatement);
+		response = triplestore.getAskResponse(sparqlStatement);
 	    } catch (Exception e) {
 		logger.error("Error raised calling support tag: ", e);
 		throw new JspException("Error raised calling support tag");
 	    }
 	if (graph != null)
 	    try {
-		crs = graph.getResultSet(sparqlStatement);
+		response = graph.getAskResponse(sparqlStatement);
 	    } catch (Exception e) {
 		logger.error("Error raised calling support tag: ", e);
 		throw new JspException("Error raised calling support tag");
 	    }
 
-	pageContext.setAttribute(var, new ResultImplementation(crs, "triple".equals(resultType)), scope);
+	pageContext.setAttribute(var, response, scope);
 	return EVAL_PAGE;
     }
 
@@ -138,7 +135,7 @@ public class QueryTag extends BodyTagSupport {
 	return buffer.toString();
     }
 
-    ResultSet getResultSet(String query, String endpoint) {
+    boolean getAskResponse(String query, String endpoint) {
 	Query theQuery = null;
 
 	if (parameterVector.size() == 0) {
@@ -156,7 +153,7 @@ public class QueryTag extends BodyTagSupport {
 	}
 
 	QueryExecution theClassExecution = QueryExecutionFactory.sparqlService(endpoint, theQuery);
-	return theClassExecution.execSelect();
+	return theClassExecution.execAsk();
     }
 
     public void setScope(String scope) {
@@ -197,13 +194,5 @@ public class QueryTag extends BodyTagSupport {
 
     public void setGraph(Graph graph) {
         this.graph = graph;
-    }
-
-    public String getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(String resultType) {
-        this.resultType = resultType;
     }
 }
