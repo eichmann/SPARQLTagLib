@@ -64,6 +64,20 @@ public class ParameterTag extends TagSupport {
 	return SKIP_BODY;
     }
 
+    public int doEndTag() throws JspException {
+	clearServiceState();
+	return EVAL_PAGE;
+    }
+
+    public void doFinally() {
+    }
+    
+    void clearServiceState() {
+	type = "literal";
+	endpoint = null;
+	value = null;
+	var = null;
+    }
     public void release() {
 	init();
     }

@@ -116,10 +116,25 @@ public class QueryTag extends BodyTagSupport {
 	    }
 
 	pageContext.setAttribute(var, new ResultImplementation(crs, "triple".equals(resultType)), scope);
+	clearServiceState();
 	return EVAL_PAGE;
     }
 
     public void doFinally() {
+    }
+    
+    void clearServiceState() {
+	resultType = "literal";
+	endpoint = null;
+	triplestore = null;
+	graph = null;
+	sparql = null;
+	sparqlStatement = null;
+	prefixVector = new Vector<Prefix>();
+	parameterVector = new Vector<Parameter>();
+
+	scope = PageContext.PAGE_SCOPE;
+	var = null;
     }
 
     public void addPrefix(Prefix prefix) {
