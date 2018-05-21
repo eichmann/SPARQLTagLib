@@ -102,7 +102,7 @@ public class QueryTag extends BodyTagSupport {
 	    crs = getResultSet(sparqlStatement, endpoint.getUrl());
 	if (triplestore != null)
 	    try {
-		crs = triplestore.getResultSet(sparqlStatement);
+		crs = triplestore.getResultSet(sparqlStatement, parameterVector);
 	    } catch (Exception e) {
 		logger.error("Error raised calling support tag: ", e);
 		throw new JspException("Error raised calling support tag");
