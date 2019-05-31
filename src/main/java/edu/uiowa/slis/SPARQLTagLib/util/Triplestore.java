@@ -5,16 +5,9 @@ import java.lang.reflect.Method;
 import java.util.Vector;
 
 import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
 import org.apache.log4j.Logger;
-
-import edu.uiowa.slis.SPARQLTagLib.ParameterTag;
 
 public class Triplestore {
     static Logger logger = Logger.getLogger(Triplestore.class);
