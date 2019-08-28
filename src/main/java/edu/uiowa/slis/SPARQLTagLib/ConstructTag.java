@@ -36,7 +36,7 @@ public class ConstructTag extends BodyTagSupport {
     Vector<Prefix> prefixVector = new Vector<Prefix>();
     Vector<Parameter> parameterVector = new Vector<Parameter>();
 
-    private int scope = PageContext.PAGE_SCOPE;
+    private int scope = PageContext.REQUEST_SCOPE;
     private String var = null;
 
     public ConstructTag() {
@@ -48,7 +48,7 @@ public class ConstructTag extends BodyTagSupport {
 	endpoint = null;
 	sparql = null;
 
-	scope = PageContext.PAGE_SCOPE;
+	scope = PageContext.REQUEST_SCOPE;
 	var = null;
     }
 
@@ -102,7 +102,12 @@ public class ConstructTag extends BodyTagSupport {
 	    }
 
 	logger.info("Construct " + var + " contains " + model.size() + " triples.");
-	pageContext.setAttribute(var, new Graph(model), scope);
+	Graph existingGraph = (Graph) pageContext.findAttribute(var);
+	if (existingGraph != null) {
+	    logger.info("Existing model contains " + existingGraph.getModel().size() + " triples.");
+	    existingGraph.addModel(model);
+	} else
+	    pageContext.setAttribute(var, new Graph(model), scope);
 	return EVAL_PAGE;
     }
 

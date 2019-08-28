@@ -43,6 +43,10 @@ public class Graph {
 	this.model = model;
     }
 
+    public void addModel(Model model) {
+	this.model.add(model);
+    }
+
     public ResultSet getResultSet(String sparqlStatement) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
 	Query theQuery = null;
 
