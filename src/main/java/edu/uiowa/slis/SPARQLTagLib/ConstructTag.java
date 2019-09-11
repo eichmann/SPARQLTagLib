@@ -17,6 +17,7 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 
 import edu.uiowa.slis.SPARQLTagLib.util.Graph;
 import edu.uiowa.slis.SPARQLTagLib.util.Endpoint;
@@ -89,7 +90,7 @@ public class ConstructTag extends BodyTagSupport {
     }
 
     public int doEndTag() throws JspException {
-	Model model = null;
+	Model model = ModelFactory.createDefaultModel();
 	
 	if (endpoint != null)
 	    model = getModel(sparqlStatement, endpoint.getUrl());
